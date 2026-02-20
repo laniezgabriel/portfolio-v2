@@ -1292,8 +1292,18 @@ footer {
         font-size: 2.2rem !important; /* Au lieu de 3rem */
         margin-bottom: 40px !important;
     }
+  
     .glitch-name {
-        font-size: 3rem; /* Pour que le nom tienne sur une ligne */
+        font-size: 2.2rem !important; /* Beaucoup plus petit pour rentrer sur l'écran */
+        white-space: normal !important; /* Autorise le passage à la ligne sur mobile */
+        text-align: center;
+    }
+
+    .name-box {
+        width: 100% !important; /* La boîte s'arrête exactement à la limite de l'écran */
+        max-width: 100% !important;
+        box-sizing: border-box; 
+        padding: 10px 15px !important;
     }
     .subtitle {
         font-size: 1.4rem;
@@ -1367,4 +1377,5 @@ footer {
     
 
 }
+
 
