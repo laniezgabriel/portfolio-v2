@@ -704,18 +704,22 @@ ul { list-style: none; }
 }
 
 
-/* --- 2. CADRE DU NOM (Correction Fond Noir Opaque) --- */
+/* --- 2. CADRE DU NOM --- */
 .name-box {
     display: inline-block;
+    
+    /* LA MAGIE EST ICI : Force la boîte à coller au texte, même sur 2 lignes */
+    width: -moz-fit-content; 
+    width: fit-content; 
+    
     padding: 15px 30px;
-    background-color: #000000; /* FOND NOIR TOTAL */
+    background-color: #000000;
     border: 3px solid var(--neon-blue);
     animation: neonBoxPulse 2s infinite alternate;
     margin-bottom: 20px;
     position: relative;
     z-index: 10;
 }
-
 @keyframes neonBoxPulse {
     0% { box-shadow: 0 0 10px rgba(0, 243, 255, 0.2), inset 0 0 5px rgba(0, 243, 255, 0.1); }
     100% { box-shadow: 0 0 25px rgba(0, 243, 255, 0.6), inset 0 0 15px rgba(0, 243, 255, 0.3); }
@@ -1360,4 +1364,5 @@ footer {
         padding-top: 50px !important;
     }
     
+
 }
