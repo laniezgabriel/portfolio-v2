@@ -1,0 +1,1363 @@
+/* --- 1. VARIABLES & RESET --- */
+:root {
+    --bg-color: #050505;          /* Fond presque noir */
+    --card-bg: #101015;           /* Fond des cartes légèrement plus clair */
+    --text-main: #e0e0e0;         /* Blanc cassé pour la lecture */
+    --text-muted: #a0a0a0;        /* Gris pour les textes secondaires */
+    --neon-blue: #00f3ff;         /* TA couleur principale (Cyan Néon) */
+    --neon-glow: 0 0 10px rgba(0, 243, 255, 0.7); /* L'effet de lumière */
+    --font-main: 'Roboto', sans-serif;
+    --font-title: 'Orbitron', sans-serif; /* Police futuriste */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Modification du BODY pour que le fond soit partout pareil */
+body {
+    /* Un fond global qui couvre toute la page */
+    background: radial-gradient(circle at 50% 20%, #151520 0%, #050505 80%);
+    background-attachment: fixed; /* Le fond ne bouge pas quand on scrolle (effet pro) */
+    color: var(--text-main);
+    font-family: var(--font-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; transition: 0.3s; }
+ul { list-style: none; }
+
+/* --- 2. NAVIGATION (STYLE VERRE & ALIGNÉ) --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    /* C'est ici que ça se joue : on met 10% sur les côtés comme le reste du site */
+    padding: 20px 10%; 
+    
+    /* Effet Verre (Glassmorphism) pour voir le fond passer derrière */
+    background: rgba(5, 5, 5, 0.7); /* Noir transparent */
+    backdrop-filter: blur(10px); /* Le flou */
+    -webkit-backdrop-filter: blur(10px);
+    
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Ligne discrète */
+    
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    font-weight: 700;
+    
+    /* MODIFICATION : Le logo est maintenant couleur Néon + Brillant (éclairé) */
+    color: var(--neon-blue); 
+    text-shadow: var(--neon-glow); /* L'effet de lumière est permanent */
+    
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.logo:hover {
+    /* Au survol, on intensifie encore la lumière */
+    text-shadow: 0 0 20px var(--neon-blue), 0 0 40px var(--neon-blue);
+}
+
+.nav-links {
+    display: flex;
+    gap: 40px; /* Plus d'espace entre les liens */
+}
+
+.nav-links a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    
+    /* MODIFICATION : Texte en bleu */
+    /* Note : J'utilise le bleu clair (neon) car le "bleu nuit" sombre serait illisible sur le fond noir */
+    color: var(--neon-blue); 
+    
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    /* Au survol, le texte devient blanc pour faire un contraste */
+    color: #fff;
+    text-shadow: 0 0 5px #fff;
+}
+
+/* Petite barre qui apparaît sous le lien au survol */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: var(--neon-blue);
+    transition: width 0.3s;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+
+/* --- 3. HERO & BIO (NOUVEAU DESIGN GAUCHE) --- */
+/* Modification du HERO pour qu'il soit transparent (il laisse voir le body) */
+.hero-left {
+    min-height: 90vh; /* Un peu moins haut pour inviter à scroller */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 10%;
+    padding-right: 10%;
+    background: transparent; /* IMPORTANT : on enlève le fond ici */
+}
+
+.hero-container {
+    max-width: 800px;
+    text-align: left; /* Force l'alignement à gauche du texte */
+}
+
+
+/* DÉFINITION DE L'ANIMATION (À ajouter juste en dessous) */
+@keyframes neonBoxPulse {
+    0% {
+        box-shadow: 0 0 10px rgba(0, 243, 255, 0.2), 
+                    inset 0 0 5px rgba(0, 243, 255, 0.1);
+    }
+    100% {
+        box-shadow: 0 0 25px rgba(0, 243, 255, 0.6), /* Lueur externe forte */
+                    inset 0 0 15px rgba(0, 243, 255, 0.3); /* Lueur interne */
+    }
+}
+
+
+.glitch-name {
+    font-family: var(--font-title);
+    font-size: 4.5rem; /* Très gros */
+    color: #fff;
+    margin: 0;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.subtitle {
+    font-size: 1.8rem;
+    color: var(--neon-blue);
+    margin-bottom: 30px;
+    display: block;
+}
+
+
+.bio-left-align p {
+    font-size: 1.55rem;      /* Beaucoup plus grand (était ~1rem) */
+    line-height: 1.9;        /* Plus d'espace entre les lignes pour aérer */
+    color: #ffffff;          /* Blanc pur pour un contraste maximum (au lieu de gris) */
+    margin-bottom: 30px;     /* Espace net entre les paragraphes */
+    letter-spacing: 0.5px;   /* Légère distance entre les lettres */
+    max-width: 800px;        /* Empêche le texte d'être trop large sur grand écran */
+    text-shadow: 0 0 2px rgba(0,0,0,0.5); /* Petite ombre pour détacher le texte du fond */
+}
+
+.btn-neon-small {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 25px;
+    border: 1px solid var(--neon-blue);
+    color: var(--neon-blue);
+    font-family: var(--font-title);
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.btn-neon-small:hover {
+    background: var(--neon-blue);
+    color: #000;
+    box-shadow: 0 0 15px var(--neon-blue);
+}
+
+
+.section-title {
+    font-family: var(--font-title);
+    font-size: 3rem; /* Intermédiaire : 3rem (au lieu de 2.5 et 4) */
+    text-align: left; 
+    margin-bottom: 50px;
+    color: #fff;
+    border-bottom: 3px solid var(--neon-blue);
+    display: inline-block; 
+    padding-right: 30px; 
+    padding-bottom: 10px;
+}
+.container {
+    padding: 100px 10%; /* Espace en haut/bas de 100px, et alignement 10% sur les côtés */
+    max-width: 1400px;
+    margin: 0; /* Important : empêche le centrage automatique */
+    text-align: left; /* Force le texte à gauche */
+}
+
+
+/* --- 6. COMPETENCES (GRID) --- */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+}
+
+.skill-card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: 0.3s;
+}
+
+.skill-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--neon-blue);
+    box-shadow: 0 5px 15px rgba(0, 243, 255, 0.2);
+}
+
+.skill-card h3 {
+    font-family: var(--font-title);
+    color: var(--neon-blue);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.skill-card ul li {
+    margin-bottom: 10px;
+    padding-left: 20px;
+    position: relative;
+}
+
+.skill-card ul li::before {
+    content: "▹"; /* Petite flèche stylée */
+    color: var(--neon-blue);
+    position: absolute;
+    left: 0;
+}
+
+/* --- 7. CONTACT & FOOTER --- */
+.contact-info {
+    text-align: center;
+}
+
+.contact-link {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    border-bottom: 1px solid var(--neon-blue);
+    padding-bottom: 5px;
+}
+
+.contact-link:hover {
+    color: var(--neon-blue);
+}
+
+/* --- 9. ANIMATIONS JS --- */
+.hidden {
+    opacity: 0;
+    transform: translateY(30px); /* Décalé vers le bas */
+    transition: all 0.8s ease-out;
+}
+
+.visible {
+    opacity: 1;
+    transform: translateY(0); /* Revient à sa place */
+}
+
+
+/* --- SECTION PROJETS (GLASSMORPHISM) --- */
+.glass-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 2 colonnes auto */
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.glass-card {
+    /* L'effet Verre iPhone */
+    background: rgba(255, 255, 255, 0.03); /* Blanc très transparent */
+    backdrop-filter: blur(10px); /* Le flou d'arrière-plan */
+    -webkit-backdrop-filter: blur(10px); /* Pour Safari */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Bordure fine et subtile */
+    border-radius: 16px;
+    padding: 30px;
+    transition: 0.4s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.08); /* Un peu plus clair au survol */
+    border-color: var(--neon-blue); /* Bordure néon au survol */
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
+}
+
+.glass-card h3 {
+    font-family: var(--font-title);
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.glass-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+/* Petit badge pour la techno utilisée */
+.tag {
+    display: inline-block;
+    padding: 5px 12px;
+    background: rgba(0, 243, 255, 0.1);
+    color: var(--neon-blue);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* --- SÉLECTEUR DE LANGUE --- */
+.lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px; /* Sépare un peu du menu */
+}
+
+.lang-btn {
+    background: none;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: var(--font-title);
+    font-size: 0.9rem;
+    padding: 2px 5px;
+    transition: 0.3s;
+}
+
+.lang-btn:hover {
+    color: #fff;
+}
+
+.lang-btn.active {
+    color: var(--neon-blue);
+    border-bottom: 1px solid var(--neon-blue);
+    text-shadow: 0 0 5px var(--neon-blue);
+}
+
+.lang-icon {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+}
+
+/* --- STYLE DU MODAL CONTACT --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; 
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Fond noir transparent */
+    backdrop-filter: blur(15px);     /* L'EFFET FLOU */
+    -webkit-backdrop-filter: blur(15px);
+    z-index: 9999; /* Très haut pour être au-dessus de tout */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Caché par défaut */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-box {
+    text-align: center;
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.2); /* Lueur néon autour de la boîte */
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px; right: 20px;
+    font-size: 2.5rem;
+    color: #fff;
+    cursor: pointer;
+    line-height: 0.5;
+}
+.close-btn:hover { color: var(--neon-blue); }
+
+/* --- LE GROS BOUTON D'ACTION --- */
+.btn-action-big {
+    background-color: var(--neon-blue); /* Fond Cyan */
+    color: #000; /* Texte Noir */
+    font-family: var(--font-title);
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px; /* Coins légèrement arrondis */
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); /* Petite lueur */
+}
+
+.btn-action-big:hover {
+    transform: scale(1.05); /* Grossit un peu au survol */
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.8); /* Lueur plus forte */
+}
+
+/* --- LA FENÊTRE MODAL (STYLE INSPIRATION) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    
+    /* FOND SOMBRE + FLOU (L'effet demandé) */
+    background: rgba(0, 0, 0, 0.6); 
+    backdrop-filter: blur(8px); 
+    -webkit-backdrop-filter: blur(8px);
+    
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Animation d'apparition */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-box {
+    background: #000; /* Fond noir profond */
+    border: 2px solid var(--neon-blue); /* Bordure Néon */
+    padding: 40px 60px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(0, 243, 255, 0.15); /* Grande ombre douce */
+    position: relative;
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-box {
+    transform: scale(1); /* Effet de zoom à l'ouverture */
+}
+
+.modal-title {
+    color: var(--neon-blue);
+    font-family: var(--font-title);
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.modal-email {
+    color: #fff;
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.modal-email:hover {
+    color: var(--neon-blue);
+    text-shadow: 0 0 10px var(--neon-blue);
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px; right: 15px;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: 0.3s;
+}
+.close-btn:hover { 
+    opacity: 1; color: var(--neon-blue); 
+}
+
+/* --- TIMELINE HORIZONTALE (FINAL & NETTOYÉ) --- */
+
+/* 1. Conteneur global pour placer les flèches sur les côtés */
+.timeline-wrapper-with-arrows {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 40px; /* Laisse de la place pour les flèches */
+}
+
+/* 2. La zone qui scrolle horizontalement */
+.horizontal-scroll-wrapper {
+    display: flex;
+    flex-direction: row;        /* Force l'alignement en ligne */
+    flex-wrap: nowrap;          /* INTERDIT le retour à la ligne (Vital !) */
+    gap: 40px;                  /* Espace entre les années */
+    overflow-x: auto;           /* Active le scroll */
+    overflow-y: hidden;
+    width: 100%;
+    
+    /* Espace augmenté en bas pour la barre (Votre demande) */
+    padding-bottom: 30px;       
+    
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 3. Barre de défilement SIMPLIFIÉE (Sans bug de lumière) */
+.horizontal-scroll-wrapper::-webkit-scrollbar {
+    height: 8px; /* Hauteur de la barre */
+    background-color: #050505;
+}
+
+.horizontal-scroll-wrapper::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    margin: 0 20px;
+}
+
+.horizontal-scroll-wrapper::-webkit-scrollbar-thumb {
+    background-color: var(--neon-blue); /* Couleur Cyan unique */
+    border-radius: 10px;
+    border: 2px solid #050505; /* Petite bordure pour détacher du fond */
+    box-shadow: none; /* On enlève les effets qui faisaient bugger */
+    cursor: pointer;
+}
+
+.horizontal-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+    background-color: #fff; /* Devient blanc au survol */
+}
+
+/* 4. Style des Flèches (Gauche / Droite) */
+.scroll-arrow {
+    position: absolute;
+    top: 45%; 
+    transform: translateY(-50%);
+    font-size: 2rem;
+    color: var(--neon-blue);
+    opacity: 0.8;
+    pointer-events: none; /* On clique à travers */
+    animation: pulseArrow 2s infinite alternate;
+    z-index: 10;
+}
+
+.arrow-left { left: 0; }
+.arrow-right { right: 0; }
+
+@keyframes pulseArrow {
+    0% { opacity: 0.4; transform: translateY(-50%) scale(0.9); }
+    100% { opacity: 1; transform: translateY(-50%) scale(1.1); }
+}
+
+/* 5. Style des Colonnes (Années) */
+.year-column {
+    flex: 0 0 380px; /* Intermédiaire (avant c'était 300px) */
+    width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.year-title {
+    font-family: var(--font-title);
+    font-size: 2rem;
+    color: #fff;
+    border-bottom: 2px solid var(--neon-blue);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+/* --- FOND ANIMÉ (PARTICULES) --- */
+#particles-js {
+    position: fixed; /* Reste fixe quand on scrolle */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* TRES IMPORTANT : Le met derrière le texte pour pouvoir cliquer */
+    background: transparent; /* Laisse voir votre dégradé actuel */
+}
+
+/* --- MISE EN PAGE HERO (2 COLONNES) --- */
+
+.hero-split-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 0 10%; /* IMPORTANT : S'aligne parfaitement avec le .container */
+    min-height: 100vh;
+    padding-top: 150px; 
+}
+
+/* Colonne GAUCHE (Texte) */
+.hero-left-content {
+    flex: 1; /* Prend la place disponible */
+    max-width: 55%; /* Ne dépasse pas 55% de la largeur */
+    padding-right: 40px;
+    position: relative;
+    height: 100%; /* Prend toute la hauteur pour gérer la flèche en bas */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centre le texte verticalement */
+}
+
+/* Colonne DROITE (Projets) */
+.hero-right-content {
+    flex: 0 0 400px; /* Largeur fixe pour la colonne projets */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    /* Petit fond ou bordure optionnel pour détacher la zone */
+    /* background: rgba(0,0,0,0.2); border-left: 1px solid rgba(255,255,255,0.1); */
+    padding-left: 40px;
+}
+
+.top-projects-title {
+    font-family: var(--font-title);
+    color: var(--neon-blue);
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: left;
+    border-bottom: 2px solid var(--neon-blue);
+    display: inline-block;
+    width: fit-content;
+}
+
+.top-projects-grid {
+    display: flex;
+    flex-direction: column; /* Empile les cartes verticalement */
+    gap: 20px;
+}
+
+/* Style spécifique pour ces petites cartes "Hero" */
+.project-card-mini {
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    transition: 0.3s;
+}
+
+.project-card-mini:hover {
+    transform: translateX(-10px); /* Bouge vers la gauche au survol (vers le texte) */
+    border-color: var(--neon-blue);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.project-card-mini h4 {
+    color: #fff;
+    margin-bottom: 5px;
+    font-family: var(--font-title);
+}
+
+/* Animation de la flèche dans le bouton Parcours */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-5px); }
+    60% { transform: translateY(-3px); }
+}
+
+.hero-left-content {
+    flex: 1;
+    max-width: 55%;
+    padding-right: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hero-right-content {
+    flex: 0 0 400px; /* Largeur fixe pour la colonne de droite */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 40px;
+}
+
+
+/* --- 2. CADRE DU NOM (Correction Fond Noir Opaque) --- */
+.name-box {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: #000000; /* FOND NOIR TOTAL */
+    border: 3px solid var(--neon-blue);
+    animation: neonBoxPulse 2s infinite alternate;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 10;
+}
+
+@keyframes neonBoxPulse {
+    0% { box-shadow: 0 0 10px rgba(0, 243, 255, 0.2), inset 0 0 5px rgba(0, 243, 255, 0.1); }
+    100% { box-shadow: 0 0 25px rgba(0, 243, 255, 0.6), inset 0 0 15px rgba(0, 243, 255, 0.3); }
+}
+
+/* --- 3. NOUVELLE SECTION COMPÉTENCES (GRILLE NÉON) --- */
+.skills-grid-neon {
+    display: grid;
+    /* MODIFICATION : On repasse à 220px minimum pour de grosses cases bien massives */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 35px; /* Un peu plus d'espace entre les cases */
+    text-align: center;
+    margin-top: 40px;
+    
+}
+
+@media (max-width: 1200px) {
+    .skills-grid-neon {
+        margin-right: 0; 
+    }
+}
+
+/* --- DESIGN DES JAUGES DE NIVEAU --- */
+.skill-level {
+    display: flex;
+    justify-content: center;
+    gap: 8px; /* Espace entre les 3 traits */
+    margin-top: 15px; /* Décolle les traits du titre */
+}
+
+.level-bar {
+    width: 25px; /* Longueur du trait */
+    height: 6px; /* Épaisseur du trait */
+    background: rgba(255, 255, 255, 0.1); /* Trait vide (Gris/Transparent) */
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+/* Les couleurs selon ton niveau (Effet Néon) */
+.lvl-1 { 
+    background: #ff2a2a; /* Rouge */
+    box-shadow: 0 0 8px rgba(255, 42, 42, 0.6); 
+} 
+.lvl-2 { 
+    background: #ffcc00; /* Jaune */
+    box-shadow: 0 0 8px rgba(255, 204, 0, 0.6); 
+} 
+.lvl-3 { 
+    background: var(--neon-blue); /* Cyan (Le max) */
+    box-shadow: 0 0 8px rgba(0, 243, 255, 0.6); 
+}
+
+.skill-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 40px 20px; /* Plus haut pour donner de la prestance */
+    border-radius: 15px;
+    transition: 0.3s;
+    cursor: default;
+}
+
+.skill-box i {
+    font-size: 3.5rem; /* Icônes un peu plus grosses */
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.skill-box h3 {
+    font-size: 1.1rem;
+    color: #fff;
+    font-family: var(--font-title);
+}
+
+.skill-box:hover {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+    transform: translateY(-5px);
+}
+
+.skill-box:hover i {
+    color: var(--neon-blue);
+    text-shadow: 0 0 15px var(--neon-blue);
+}
+
+/* --- 4. TIMELINE HORIZONTALE FINALISÉE --- */
+.timeline-wrapper-with-arrows {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+}
+
+.horizontal-scroll-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;          /* Force l'alignement en ligne */
+    gap: 40px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+    padding-bottom: 30px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Barre de défilement (Scrollbar) */
+.horizontal-scroll-wrapper::-webkit-scrollbar {
+    height: 8px;
+    background-color: #050505;
+}
+
+.horizontal-scroll-wrapper::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    margin: 0 20px;
+}
+
+.horizontal-scroll-wrapper::-webkit-scrollbar-thumb {
+    background-color: var(--neon-blue);
+    border-radius: 10px;
+    border: 2px solid #050505;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+/* Flèches de navigation Timeline */
+.scroll-arrow {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    color: var(--neon-blue);
+    opacity: 0.8;
+    pointer-events: none;
+    animation: pulseArrow 2s infinite alternate;
+    z-index: 10;
+}
+.arrow-left { left: 0; }
+.arrow-right { right: 0; }
+
+@keyframes pulseArrow {
+    0% { opacity: 0.4; transform: translateY(-50%) scale(0.9); }
+    100% { opacity: 1; transform: translateY(-50%) scale(1.1); }
+}
+
+/* Style des cartes dans la timeline */
+.year-column {
+    flex: 0 0 300px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* --- STYLE DU MODAL RÉSEAUX --- */
+
+/* Conteneur des boutons */
+.social-links-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+/* Les boutons Réseaux */
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px; /* Espace entre l'icône et le texte */
+    padding: 15px;
+    font-size: 1.2rem;
+    font-family: var(--font-title);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    transition: 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.social-btn i {
+    font-size: 1.5rem; /* Icône plus grosse */
+}
+
+/* Effet au survol (Hover) */
+.social-btn:hover {
+    background: var(--neon-blue); /* Devient Cyan */
+    color: #000; /* Texte devient noir */
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.4); /* Lueur */
+    transform: scale(1.02); /* Grossit un tout petit peu */
+}
+/* --- PIED DE PAGE (Déplacé vers le bas) --- */
+footer {
+    text-align: center;
+    padding: 30px;
+    background: #000;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    
+    /* C'EST ICI QUE TOUT CHANGE : */
+    /* On met la marge AVANT le footer pour le pousser loin du contact */
+    margin-top: 40vh; /* Espace vide avant les mentions légales */
+    
+    position: relative;
+    z-index: 2;
+}
+
+/* --- ZONE DE BOUCLE (Collée sous le footer) --- */
+#loop-zone {
+    /* On enlève la marge ici car elle est maintenant sur le footer */
+    margin-top: 0; 
+    
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(to top, var(--neon-blue), transparent);
+    opacity: 0;
+    transition: opacity 0.5s;
+    cursor: pointer;
+}
+
+/* Le reste ne change pas */
+#loop-zone.active { opacity: 1; }
+.loop-content { color: #000; font-family: var(--font-title); font-weight: bold; letter-spacing: 2px; }
+.loop-icon { display: block; font-size: 2rem; animation: spin 2s linear infinite; margin-bottom: 10px; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* --- CHATBOT WIDGET --- */
+#chatbot-widget {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 2000; /* Au-dessus de tout */
+    font-family: var(--font-main);
+}
+
+/* Le Bouton Rond */
+#chat-toggle-btn {
+    width: 60px;
+    height: 60px;
+    background: #000;
+    border: 2px solid var(--neon-blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+    transition: 0.3s;
+    animation: pulseBot 2s infinite;
+}
+
+#chat-toggle-btn i {
+    font-size: 1.8rem;
+    color: var(--neon-blue);
+}
+
+#chat-toggle-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px var(--neon-blue);
+}
+
+@keyframes pulseBot {
+    0% { box-shadow: 0 0 0 0 rgba(0, 243, 255, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(0, 243, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 243, 255, 0); }
+}
+
+/* La Fenêtre de Chat */
+#chat-window {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 350px;
+    height: 450px;
+    background: rgba(10, 10, 15, 0.95); /* Fond sombre quasi opaque */
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--neon-blue);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    
+    /* Caché par défaut avec animation */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px) scale(0.9);
+    transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+#chat-window.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+/* En-tête */
+.chat-header {
+    background: var(--neon-blue);
+    color: #000;
+    padding: 15px;
+    font-family: var(--font-title);
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-chat {
+    cursor: pointer;
+    font-size: 1.5rem;
+    line-height: 0.5;
+}
+
+/* Zone des messages */
+.chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Bulles de messages */
+.message {
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    max-width: 80%;
+    line-height: 1.4;
+}
+
+.bot-message {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    align-self: flex-start; /* Gauche */
+    border-left: 3px solid var(--neon-blue);
+}
+
+.user-message {
+    background: var(--neon-blue);
+    color: #000;
+    align-self: flex-end; /* Droite */
+    font-weight: 500;
+}
+
+/* --- BOUTON CHATBOT (PLUS VISIBLE) --- */
+#chat-toggle-btn {
+    width: 60px;
+    height: 60px;
+    
+    /* MODIFICATION : On inverse les couleurs pour le rendre immanquable */
+    background: var(--neon-blue); /* Fond Cyan lumineux */
+    color: #000; /* Icône noire */
+    
+    border: none; /* Plus besoin de bordure, tout le bouton brille */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    
+    /* Lueur intense */
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+    transition: 0.3s;
+    z-index: 2002;
+    position: relative;
+}
+
+#chat-toggle-btn i {
+    font-size: 1.8rem;
+    color: #000; /* L'icône est noire maintenant */
+}
+
+#chat-toggle-btn:hover {
+    transform: scale(1.1) rotate(10deg); /* Petite rotation fun */
+    box-shadow: 0 0 30px var(--neon-blue);
+    background: #fff; /* Devient blanc au survol */
+}
+
+
+
+/* --- EFFET DE FLOU (FADE) SUR LA TIMELINE --- */
+.horizontal-scroll-wrapper {
+    /* Création d'un masque dégradé : Transparent au bord -> Visible au centre -> Transparent au bord */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    
+    /* Petite marge pour que les cartes ne soient pas collées aux flèches */
+    padding-left: 20px;
+    padding-right: 20px;
+}
+/* --- CORRECTION BARRE DE CHAT (DESIGN NÉON) --- */
+.chat-input-area {
+    padding: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center; /* Centre le bouton et le champ */
+    gap: 10px;
+    background: transparent;
+}
+
+.chat-input-area input {
+    flex: 1; /* Prend toute la place */
+    background-color: #050505 !important; /* FOND NOIR OBLIGATOIRE */
+    border: 1px solid var(--neon-blue) !important; /* Bordure Cyan */
+    border-radius: 25px; /* Bien arrondi */
+    padding: 12px 20px;
+    color: #fff !important; /* Texte Blanc */
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.95rem;
+    outline: none; /* Pas de contour bleu moche au clic */
+    box-shadow: inset 0 0 5px rgba(0, 243, 255, 0.1);
+}
+
+.chat-input-area input::placeholder {
+    color: rgba(255, 255, 255, 0.5); /* Texte "Écrivez..." en gris clair */
+}
+
+.chat-input-area button {
+    background: transparent !important;
+    border: none !important;
+    color: var(--neon-blue) !important; /* Avion en bleu */
+    font-size: 1.4rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: transform 0.2s ease;
+}
+
+.chat-input-area button:hover {
+    transform: scale(1.2) rotate(-10deg); /* Petite animation au survol */
+    text-shadow: 0 0 15px var(--neon-blue);
+}
+
+/* 1. L'animation de rotation */
+@keyframes spin-gradient {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.project-mini {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1;
+    padding: 30px; /* Un peu plus grand (avant c'était 20px) */
+    min-height: 160px; /* Donne un peu plus de volume */
+}
+
+/* Au survol */
+.project-mini:hover {
+    border-color: transparent;
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.2), 0 0 10px rgba(155, 93, 229, 0.3);
+}
+
+/* 3. Le dégradé tournant (DERRIÈRE) - BEAUCOUP PLUS GRAND */
+.project-mini:hover::before {
+    content: '';
+    position: absolute;
+    /* On le place au centre */
+    top: 50%; left: 50%;
+    /* On le rend immense (2x la taille de la carte) pour éviter les cassures */
+    width: 150%;
+    height: 80%;
+    z-index: -2;
+    
+    /* Le dégradé fluide */
+    background: conic-gradient(
+        var(--neon-blue),
+        #ffffff,
+        #9b5de5,
+        var(--neon-blue)
+    );
+    
+    /* L'animation qui inclut le centrage */
+    animation: spin-gradient 10s linear infinite;
+    /* Pas de border-radius ici, c'est un grand carré qui tourne */
+}
+
+/* 4. Le fond de la carte (DEVANT) - Crée le "masque" */
+.project-mini:hover::after {
+    content: '';
+    position: absolute;
+    /* On laisse quelques pixels (3px) sur les bords pour voir l'animation */
+    top: 3px; left: 3px; right: 3px; bottom: 3px;
+    background:  #1f1f25;
+    
+    z-index: -1;
+    /* Ici, on remet le border-radius pour que le fond intérieur soit arrondi */
+    border-radius: inherit; 
+}
+
+/* Le contenu reste au-dessus */
+.project-mini h3,
+.project-mini p,
+.project-mini .project-tech-tag {
+    position: relative;
+    z-index: 10; /* Z-index plus élevé pour être sûr */
+}
+
+#contact {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important; 
+    
+    /* LES DEUX LIGNES MAGIQUES QUI RÈGLENT LE PROBLÈME PC : */
+    width: 100% !important; 
+    max-width: 100% !important; /* Annule la limite de 1400px du .container */
+    
+    margin: 0 !important;
+    padding-left: 0 !important; 
+    padding-right: 0 !important;
+    transform: none !important; 
+    
+    scroll-margin-top: 120px !important; 
+}
+
+/* S'assure que le conteneur interne ne bloque pas non plus */
+#contact .container {
+    padding: 0 !important;
+    display: flex;
+    justify-content: center;
+}
+
+
+@media (max-width: 768px) {
+
+    :root {
+        --text-muted: #e0e0e0; /* Transforme le gris en gris très clair/blanc cassé sur mobile */
+    }
+    
+    /* 1. Marges globales (On passe de 10% à 5% pour gagner de la place) */
+    .container{
+        padding-left: 5% !important;
+        padding-right: 5% !important;
+    }
+    
+    /* 2. Menu de Navigation (Empilé pour ne pas se chevaucher) */
+    .navbar {
+        flex-direction: column;
+        padding: 15px 5%;
+        gap: 15px;
+    }
+    .nav-links {
+        gap: 15px;
+        flex-wrap: wrap; /* Permet aux liens de passer à la ligne si l'écran est tout petit */
+        justify-content: center;
+    }
+    /* S'assure que le bouton FR/EN trouve sa place */
+    .lang-switch {
+        margin-left: 0;
+        margin-top: 5px;
+    }
+
+    /* 3. Textes et Titres (Réduction proportionnelle) */
+    .section-title {
+        font-size: 2.2rem !important; /* Au lieu de 3rem */
+        margin-bottom: 40px !important;
+    }
+    .glitch-name {
+        font-size: 3rem; /* Pour que le nom tienne sur une ligne */
+    }
+    .subtitle {
+        font-size: 1.4rem;
+    }
+    .bio-left-align p {
+        font-size: 1.2rem !important;
+    }
+
+    /* 4. Section Accueil (Passage de 2 colonnes à 1 colonne) */
+    .hero-left-content, 
+    .hero-right-content {
+        max-width: 100%;
+        width: 100%;
+        padding: 0;
+    }
+    .hero-right-content {
+        margin-top: 50px; /* Espace entre votre bio et les cartes de droite */
+    }
+
+    /* 5. Timeline / Parcours (Optimisé pour le balayage tactile) */
+
+    /* Rendre les descriptions des projets plus blanches/lisibles sur mobile */
+    .project-mini p {
+        color: #ffffff !important; /* Force le blanc pur */
+        font-weight: 400; /* Rend le texte un tout petit peu plus épais si besoin */
+    }
+    .year-column {
+        flex: 0 0 85vw; /* Chaque colonne prend 85% de l'écran du téléphone */
+        width: 85vw;
+    }
+    .scroll-arrow {
+        display: none; /* On cache les flèches car sur mobile on glisse avec le doigt (swipe) */
+    }
+    .skill-box {
+        padding: 30px 15px;
+    }
+
+    /* 7. Chatbot (Empêche de déborder de l'écran) */
+    #chat-window {
+        width: calc(100vw - 40px); /* Prend toute la largeur moins 20px de chaque côté */
+        right: 20px;
+        bottom: 90px;
+    }
+    
+    /* 8. Fenêtres pop-up (Modals Réseaux & Contact) */
+    .modal-box {
+        padding: 30px 20px;
+        width: 95%; /* Prend quasiment tout l'écran */
+    }
+    .modal-title {
+        font-size: 1.5rem;
+    }
+    /* On enlève la bordure sur mobile car le chat prend tout l'écran en bas de toute façon */
+
+    .skills-grid-neon {
+        padding-right: 0;
+        margin-right: 0;
+        border-right: none;
+    }
+    .hero-split-layout {
+        flex-direction: column;
+        padding-top: 280px !important; /* CORRECTION 1 : On pousse beaucoup plus bas pour éviter le menu géant */
+        align-items: flex-start;
+    }
+  
+    #contact {
+        /* On demande à la page de s'arrêter 280px AVANT le bouton pour ne pas être caché par le menu */
+        scroll-margin-top: 280px !important; 
+        padding-top: 50px !important;
+    }
+    
+}

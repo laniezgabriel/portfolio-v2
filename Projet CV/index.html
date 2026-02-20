@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabriel Laniez | Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    
+    <div id="particles-js"></div>
+    
+    <nav class="navbar">
+        <div class="logo">GL</div>
+        
+        <ul class="nav-links">
+            <li><a href="#home" data-lang="nav-home">Accueil</a></li>
+            <li><a href="#skills" data-lang="nav-skills">Compétences</a></li>
+            <li><a href="#projects-timeline" data-lang="nav-timeline">Parcours</a></li>
+            <li><a href="#" onclick="event.preventDefault(); toggleSocialModal()" data-lang="nav-social">Réseaux</a></li>
+            <li><a href="#contact" data-lang="nav-contact">Contact</a></li>
+        </ul>
+
+        <div class="lang-switch">
+            <button id="btn-fr" class="lang-btn active">FR</button>
+            <span class="lang-icon">/</span> 
+            <button id="btn-en" class="lang-btn">EN</button>
+        </div>
+    </nav>
+    
+    <section id="home" class="hero-split-layout">
+        
+        <div class="hero-left-content">
+            <div class="hero-container">
+                <div class="name-box">
+                    <h1 class="glitch-name">Gabriel Laniez</h1>
+                </div>
+                
+                <h2 class="subtitle" data-lang="subtitle">Étudiant BUT Informatique premiér année</h2>
+
+                <div class="bio-left-align">
+                    <h2 class="section-title" data-lang="bio-title" style="font-size: 2rem !important; margin-bottom: 30px;">
+                            Du commencement à maintenant : <br> <span style="color: var(--neon-blue);">Une Vision Hybride.</span>
+                        </h2>
+
+                        <p data-lang="bio-p1">
+                            Tout n'a pas commencé par une ligne de code, mais par une vision. Fasciné par le numériques et la <strong>Science-Fiction</strong>, j'ai vite compris que je voulais venir decouvrir et experimenter ces technologie qui me facinait tant. Mon voyage a débuté sur des serveurs <strong>Minecraft</strong>, à modifier des fichiers du jeu pour simplement m'amuser avec mes amis. Cette curiosité ne m'a jamais quitté.
+                        </p>
+
+                        <p data-lang="bio-p2">
+                            Aujourd'hui, cette curiosité est devenue expertise. Je pense commencer à savoir maîtriser les bases du Développement Web (<strong>HTML/CSS</strong>), ma vraie force réside dans l'utilisation des outils modernes. Je ne vois pas l'<strong>Intelligence Artificielle</strong> comme une mode, mais comme un partenaire quotidien qui décuple ma productivité. Je ne fais pas qu'essayer de résoudre des problèmes, j'automatise les solutions.
+                        </p>
+
+                        <p data-lang="bio-p3">
+                            Je pense avoir un <strong>Profil Hybride</strong>. J'aime la logique du code, mais je vibre pour le <strong>Commerce et le Leadership</strong>. Qu'il s'agisse de planifier un projet, gérer une équipe ou vendre un produit, j'apporte ma vision .
+                        </p>
+
+                        <p data-lang="bio-p4">
+                            Ma motivation ? <strong>L'Impact et la Performance.</strong> Que ce soit pour créer un nouveaux projet, je suis guidé par mes idées et mon instinct. Je ne m'inquiète pas d'où je serai dans 10 ans ou même voir 5 ans, je profite plus de l'<strong>instant présent</strong> ,du jour au jour. Je pense que ce court extrait peut résumer une partie de la complexité de ma personne et de celui auquelle j'asppir a devenir signé <span style="color: var(--neon-blue);">Gabriel Laniez</span>.
+                        </p>
+                    <a href="#contact" class="btn-neon-small" data-lang="btn-contact">Me Contacter</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-right-content">
+            <h3 class="top-projects-title" data-lang="title-projects">Mes Réalisations</h3>
+            
+            <div class="top-projects-grid">
+                <div class="glass-card project-card-mini">
+                    <h4>Projet a venir</h4>
+                    <p>A dévelloper</p>
+                    <span class="tag">Wordpress</span>
+                </div>
+
+                <div class="glass-card project-card-mini">
+                    <h4>Projet a venir</h4>
+                    <p>A dévelloper</p>
+                    <span class="tag">Python</span>
+                </div>
+
+                <div class="glass-card project-card-mini">
+                    <h4>Portfolio V1</h4>
+                    <p>Première version de mon site.</p>
+                    <span class="tag">HTML/CSS</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; text-align: center; width: 100%;">
+                <a href="#projects-timeline" class="btn-neon-small" data-lang="btn-discover">
+                    Découvrir mon parcours <i class="fas fa-arrow-down" style="margin-left: 10px; animation: bounce 2s infinite;"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="skills" class="container">
+        <h2 class="section-title" data-lang="title-skills">Compétences Techniques</h2>
+        
+       <div class="skills-grid-neon">
+            
+            <div class="skill-box">
+                <i class="fab fa-html5"></i>
+                <h3>HTML5 / CSS3</h3>
+                <div class="skill-level">
+                    <span class="level-bar lvl-3"></span>
+                    <span class="level-bar lvl-3"></span>
+                    <span class="level-bar lvl-3"></span> </div>
+            </div>
+
+            <div class="skill-box">
+                <i class="fab fa-js"></i>
+                <h3>JavaScript</h3>
+                <div class="skill-level">
+                    <span class="level-bar lvl-2"></span>
+                    <span class="level-bar lvl-2"></span>
+                    <span class="level-bar"></span> </div>
+            </div>
+
+            <div class="skill-box">
+                <i class="fas fa-file-code"></i>
+                <h3>C / C++</h3>
+                <div class="skill-level">
+                    <span class="level-bar lvl-2"></span>
+                    <span class="level-bar lvl-2"></span>
+                    <span class="level-bar"></span>
+                </div>
+            </div>
+
+            <div class="skill-box">
+                <i class="fab fa-python"></i>
+                <h3>Python</h3>
+                <div class="skill-level">
+                    <span class="level-bar lvl-1"></span>
+                    <span class="level-bar"></span>
+                    <span class="level-bar"></span>
+                </div>
+            </div>
+
+            <div class="skill-box">
+                <i class="fab fa-java"></i>
+                <h3>Java</h3>
+                <div class="skill-level">
+                    <span class="level-bar lvl-2"></span>
+                    <span class="level-bar lvl-2"></span>
+                    <span class="level-bar"></span>
+                </div>
+            </div>
+
+            <div class="skill-box">
+                <i class="fas fa-database"></i>
+                <h3>SQL / Data</h3>
+                <div class="skill-level">
+                    <span class="level-bar lvl-2"></span>
+                    <span class="level-bar lvl-2"></span>
+                    <span class="level-bar"></span>
+                </div>
+            </div>
+
+            <div class="skill-box">
+                <i class="fa-solid fa-server"></i>                            
+                <h3>Network</h3>
+                <div class="skill-level">
+                    <span class="level-bar lvl-1"></span>
+                    <span class="level-bar"></span>
+                    <span class="level-bar"></span>
+                </div>
+            </div>
+
+            <div class="skill-box">   
+                <i class="fas fa-brain"></i>
+                <h3>I.A. & Prompting</h3>
+                <div class="skill-level">
+                    <span class="level-bar lvl-3"></span>
+                    <span class="level-bar lvl-3"></span>
+                    <span class="level-bar lvl-3"></span>
+                </div>
+            </div>
+
+            <div class="skill-box">
+                <i class="fas fa-users"></i>
+                <h3>Gestion Projet</h3>
+                <div class="skill-level">
+                    <span class="level-bar lvl-3"></span>
+                    <span class="level-bar lvl-3"></span>
+                    <span class="level-bar lvl-3"></span>
+                </div>
+            </div>
+
+            <div class="skill-box">
+                <i class="fa-solid fa-globe"></i>
+                <h3>Français (natal)</h3>
+                <div class="skill-level">
+                    <span class="level-bar lvl-3"></span>
+                    <span class="level-bar lvl-3"></span>
+                    <span class="level-bar lvl-3"></span> </div>
+            </div>
+
+            <div class="skill-box">
+                <i class="fa-solid fa-globe"></i>
+                <h3>Anglais (bilingue)</h3>
+                <div class="skill-level">
+                    <span class="level-bar lvl-3"></span>
+                    <span class="level-bar lvl-3"></span>
+                    <span class="level-bar lvl-3"></span> </div>
+            </div>
+
+            <div class="skill-box">
+                <i class="fa-solid fa-globe"></i>
+                <h3>Espagnol</h3>
+                <div class="skill-level">
+                    <span class="level-bar lvl-1"></span>
+                    <span class="level-bar"></span>
+                    <span class="level-bar"></span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <section id="projects-timeline" class="container">
+        <h2 class="section-title" data-lang="timeline-title">Ma Vision & Parcours</h2>
+        
+        <div class="timeline-wrapper-with-arrows">
+            <div class="scroll-arrow arrow-left"><i class="fas fa-chevron-left"></i></div>
+
+            <div class="horizontal-scroll-wrapper">
+
+
+                <div class="year-column">
+                    <h3 class="year-title">2027</h3>
+                    
+                </div>
+
+                <div class="year-column">
+                    <h3 class="year-title">2026</h3>
+                    <div class="glass-card project-mini">
+                        <h4 data-lang="proj-but">BUT Informatique</h4>
+                        <p data-lang="desc-iut">IUT du Littoral Côte d'Opale.</p>
+                        <span class="tag" data-lang="tag-studies">Études</span>
+                    </div>
+                    <div class="glass-card project-mini">
+                        <h4>Portfolio V2</h4>
+                        <p data-lang="desc-portfolio">Lancement de mon site.</p>
+                        <span class="tag">Web</span>
+                    </div>
+                </div>
+
+            </div> <div class="scroll-arrow arrow-right"><i class="fas fa-chevron-right"></i></div>
+        </div>
+    </section>
+
+    <section id="contact" class="container" style="text-align: center; height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <button class="btn-action-big" onclick="toggleModal()" data-lang="btn-send-msg">
+            M'envoyer un message <i class="fas fa-paper-plane"></i>
+        </button>
+    </section>
+
+    <div id="contact-modal" class="modal-overlay">
+        <div class="modal-box">
+            <span class="close-btn" onclick="toggleModal()">&times;</span>
+            <h2 class="modal-title" data-lang="modal-title">CONTACTEZ-MOI</h2>
+            <a href="mailto:laniezgabriel59@gmail.com" class="modal-email">
+                laniezgabriel59@gmail.com <i class="far fa-copy"></i>
+            </a>
+        </div>
+    </div>
+
+    <div id="social-modal" class="modal-overlay">
+        <div class="modal-box social-box-content">
+            <span class="close-btn" onclick="toggleSocialModal()">&times;</span>
+            
+            <h2 class="modal-title" data-lang="modal-social-title">MES RÉSEAUX</h2>
+            
+            <div class="social-links-container">
+                <a href="https://github.com/" target="_blank" class="social-btn">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+
+                <a href="https://linkedin.com/" target="_blank" class="social-btn">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                </a>
+
+                </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Gabriel Laniez - Tous droits réservés.</p>
+    </footer>
+
+    <div id="loop-zone">
+        <div class="loop-content">
+            <span class="loop-icon">↻</span>
+            <p>RÉINITIALISATION DU SYSTÈME...</p>
+        </div>
+    </div>
+
+    <div id="chatbot-widget">
+        <div id="chat-toggle-btn" onclick="toggleChat()">
+            <i class="fas fa-comment-dots"></i>
+        </div>
+        <div id="chat-window">
+            <div class="chat-header">
+                <span>Assistant IA</span>
+                <span class="close-chat" onclick="toggleChat()">&times;</span>
+            </div>
+            
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot-message">
+                    Bonjour ! Je suis l'assistant virtuel de Gabriel. Comment puis-je vous aider ?
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" id="user-input" placeholder="Écrivez votre message..." onkeypress="handleEnter(event)">
+                <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="script.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="script.js"></script>
+</body>   
+</html>
