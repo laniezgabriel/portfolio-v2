@@ -145,7 +145,8 @@ ul { list-style: none; }
 
 .glitch-name {
     font-family: var(--font-title);
-    font-size: 4.5rem; /* Très gros */
+    font-size: 3.8rem; /* On réduit un peu (était à 4.5rem) */
+    white-space: nowrap; /* LA SÉCURITÉ : Interdit au texte de passer sur 2 lignes */
     color: #fff;
     margin: 0;
     line-height: 1;
@@ -1366,3 +1367,4 @@ footer {
     
 
 }
+
