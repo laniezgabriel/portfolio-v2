@@ -1374,13 +1374,66 @@ footer {
         scroll-margin-top: 280px !important; 
         padding-top: 50px !important;
     }
+    
+
+    /* 1. FIX DU SCROLL ET DU "BADGE QUI CLIGNOTE" */
     html, body {
-        overflow-x: hidden !important;
-        max-width: 100vw !important;
+        /* 'clip' est magique : il coupe ce qui dépasse SANS bloquer le doigt ni faire bugger le scroll ! */
+        overflow-x: clip !important; 
+        width: 100% !important;
+        position: relative;
+    }
+
+    /* Empêche les sauts de page quand la barre d'adresse du téléphone disparaît */
+    .hero-split-layout {
+        min-height: 100svh !important; 
+    }
+
+    /* 2. LE "MUR INVISIBLE" : DÉSACTIVER LES MOUVEMENTS AU TOUCHER */
+    /* Sur mobile, toucher une carte la fait bouger et bloque le scroll. On annule le mouvement physique ! */
+    .skill-box:hover, 
+    .glass-card:hover, 
+    .project-card-mini:hover, 
+    .project-mini:hover {
+        transform: none !important; 
+        /* On garde juste les effets de lumière, mais la carte ne bouge plus */
+    }
+    
+    #particles-js {
+        pointer-events: none !important; 
+    }
+
+    /* 3. CACHER LA BARRE DE SCROLL GRISE SUR LE CÔTÉ */
+    ::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+    }
+    * {
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+    }
+
+    /* 4. RETRAIT DU FLOU SUR LE PARCOURS */
+    .horizontal-scroll-wrapper {
+        -webkit-mask-image: none !important; 
+        mask-image: none !important;
+        padding-left: 0 !important; 
+        padding-right: 0 !important;
+    }
+
+    /* 5. SUPPRESSION DE LA FLÈCHE QUI DESCEND ET FIX DU CHATBOT */
+    .fa-arrow-down {
+        display: none !important; 
+    }
+    
+    #chat-toggle-btn {
+        animation: none !important; 
+        box-shadow: 0 0 15px rgba(0, 243, 255, 0.4) !important; 
     }
     
 
 }
+
 
 
 
