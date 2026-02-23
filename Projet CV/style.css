@@ -1430,9 +1430,33 @@ footer {
         animation: none !important; 
         box-shadow: 0 0 15px rgba(0, 243, 255, 0.4) !important; 
     }
+    /* 1. Le conteneur (la colonne entière) dicte la largeur pour tout le monde */
+    .year-column {
+        flex: 0 0 290px !important; /* 290px est une largeur parfaite et harmonieuse sur téléphone */
+        width: 290px !important;
+        gap: 15px !important; /* Rapproche un peu les cartes entre elles */
     
+    }
+
+    /* 2. Le titre et son trait bleu s'étirent exactement jusqu'au bout de la colonne */
+    .year-title {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    /* 3. Toutes les cartes prennent 100% de la colonne (Elles seront toutes identiques !) */
+    .project-mini {
+        padding: 15px 20px !important; 
+        min-height: 10px !important; 
+        height: max-content !important; 
+        
+        /* LA CORRECTION : On force 100% au lieu de fit-content */
+        width: 100% !important; 
+        box-sizing: border-box !important;
+    }
 
 }
+
 
 
 
