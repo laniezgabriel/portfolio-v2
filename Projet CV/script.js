@@ -1,15 +1,143 @@
+/* =========================================================
+   GABRIEL LANIEZ — PORTFOLIO V2 — SCRIPT AMÉLIORÉ
+   ========================================================= */
+
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. Défilement fluide
+
+    // ─────────────────────────────────────────────
+    // 1. CURSEUR PERSONNALISÉ NÉON
+    // ─────────────────────────────────────────────
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+
+    let mouseX = 0, mouseY = 0;
+    let ringX  = 0, ringY  = 0;
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        if (dot) {
+            dot.style.left = mouseX + 'px';
+            dot.style.top  = mouseY + 'px';
+        }
+    });
+
+    function animateRing() {
+        ringX += (mouseX - ringX) * 0.18;
+        ringY += (mouseY - ringY) * 0.18;
+        if (ring) {
+            ring.style.left = ringX + 'px';
+            ring.style.top  = ringY + 'px';
+        }
+        requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.addEventListener('mouseleave', () => {
+        if (dot) dot.style.opacity = '0';
+        if (ring) ring.style.opacity = '0';
+    });
+    document.addEventListener('mouseenter', () => {
+        if (dot) dot.style.opacity = '1';
+        if (ring) ring.style.opacity = '1';
+    });
+
+    // ─────────────────────────────────────────────
+    // 2. NAVBAR SCROLL EFFECT
+    // ─────────────────────────────────────────────
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar?.classList.add('scrolled');
+        } else {
+            navbar?.classList.remove('scrolled');
+        }
+    });
+
+    // ─────────────────────────────────────────────
+    // 3. SMOOTH SCROLL
+    // ─────────────────────────────────────────────
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href === '#') return;
             e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
+            const target = document.querySelector(href);
             if (target) target.scrollIntoView({ behavior: 'smooth' });
         });
     });
 
-    // 2. Animations au scroll
+    // ─────────────────────────────────────────────
+    // 4. GLITCH NAME — EFFET TEXTE SCRAMBLE
+    // ─────────────────────────────────────────────
+    const glitchEl = document.querySelector('.glitch-name');
+    if (glitchEl) {
+        const originalText = glitchEl.textContent;
+        glitchEl.setAttribute('data-text', originalText);
+
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+        let scrambleInterval = null;
+
+        function scramble() {
+            let iterations = 0;
+            clearInterval(scrambleInterval);
+            scrambleInterval = setInterval(() => {
+                glitchEl.textContent = originalText
+                    .split('')
+                    .map((char, i) => {
+                        if (i < iterations) return originalText[i];
+                        if (char === ' ') return ' ';
+                        return chars[Math.floor(Math.random() * chars.length)];
+                    })
+                    .join('');
+
+                if (iterations >= originalText.length) {
+                    clearInterval(scrambleInterval);
+                    glitchEl.textContent = originalText;
+                    glitchEl.setAttribute('data-text', originalText);
+                }
+                iterations += 0.5;
+            }, 40);
+        }
+
+        // Scramble au chargement
+        setTimeout(scramble, 300);
+
+        // Scramble au survol
+        glitchEl.closest('.name-box')?.addEventListener('mouseenter', scramble);
+    }
+
+    // ─────────────────────────────────────────────
+    // 5. TYPEWRITER SUBTITLE
+    // ─────────────────────────────────────────────
+    function typewriterEffect(element, text, speed = 55) {
+        if (!element) return;
+        element.textContent = '';
+        element.classList.remove('typed-done');
+        element.classList.add('is-typing');
+
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i < text.length) {
+                element.textContent += text[i];
+                i++;
+            } else {
+                clearInterval(interval);
+                element.classList.remove('is-typing');
+                element.classList.add('typed-done');
+            }
+        }, speed);
+    }
+
+    const subtitleEl = document.querySelector('.subtitle');
+    if (subtitleEl) {
+        const subtitleText = subtitleEl.textContent.trim();
+        setTimeout(() => typewriterEffect(subtitleEl, subtitleText), 700);
+    }
+
+    // ─────────────────────────────────────────────
+    // 6. INTERSECTION OBSERVER — ANIMATIONS SCROLL
+    // ─────────────────────────────────────────────
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -17,97 +145,102 @@ document.addEventListener('DOMContentLoaded', () => {
                 observer.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-    document.querySelectorAll('.skill-box, .year-column, .hero-left-content').forEach(el => {
-        el.style.opacity = "0"; // Préparation animation
-        el.style.transition = "opacity 0.8s ease-out, transform 0.8s ease-out";
-        el.style.transform = "translateY(20px)";
-        
-        // On crée une petite fonction pour l'animer quand classe 'visible' ajoutée
-        el.addEventListener('transitionend', () => { el.style.transition = ""; }); 
+    // Skill boxes avec délai échelonné
+    document.querySelectorAll('.skill-box').forEach((el, i) => {
+        el.style.transitionDelay = `${i * 0.07}s`;
         observer.observe(el);
     });
-    
-    // Hack pour l'animation simple via CSS class
-    const styleSheet = document.createElement("style");
-    styleSheet.innerText = ".visible { opacity: 1 !important; transform: translateY(0) !important; }";
-    document.head.appendChild(styleSheet);
 
+    // Year columns timeline
+    document.querySelectorAll('.year-column').forEach((el, i) => {
+        el.style.transitionDelay = `${i * 0.15}s`;
+        observer.observe(el);
+    });
 
-    // --- SYSTÈME DE TRADUCTION ---
+    // Section titles
+    document.querySelectorAll('.section-title').forEach(el => observer.observe(el));
+
+    // Bio paragraphs
+    document.querySelectorAll('.bio-left-align p').forEach((el, i) => {
+        el.style.transitionDelay = `${i * 0.12}s`;
+        observer.observe(el);
+    });
+
+    // Generic animate-on-scroll
+    document.querySelectorAll('.animate-on-scroll').forEach((el, i) => {
+        el.style.transitionDelay = `${i * 0.1}s`;
+        observer.observe(el);
+    });
+
+    // ─────────────────────────────────────────────
+    // 7. SYSTÈME DE TRADUCTION
+    // ─────────────────────────────────────────────
     const translations = {
         fr: {
             'nav-home': 'Accueil',
             'nav-timeline': 'Parcours',
             'nav-skills': 'Compétences',
-            'nav-social': 'Réseaux', // NOUVEAU
+            'nav-social': 'Réseaux',
             'nav-contact': 'Contact',
             'subtitle': 'Étudiant BUT Informatique première année',
-            'bio-title': 'Du commencement à maintenant: <br> <span style="color: var(--neon-blue);">Une Vision Hybride.</span>',
-            'bio-p1': "Tout n'a pas commencé par une ligne de code, mais par une vision. Fasciné par le numériques et la <strong>Science-Fiction</strong>, j'ai vite compris que je voulais venir decouvrir et experimenter ces technologie qui me facinait tant. Mon voyage a débuté sur des serveurs <strong>Minecraft</strong>, modifier des fichiers du jeu pour simplement m'amuser avec mes amis. Cette curiosité ne m'a jamais quitté.",
-            'bio-p2': "Aujourd'hui, cette curiosité est devenue expertise. Je pense commencer à savoir maîtriser les base du Développement Web (<strong>HTML/CSS</strong>), ma vraie force réside dans l'utilisation des outils modernes. Je ne vois pas l'<strong>Intelligence Artificielle</strong> comme une mode, mais comme un partenaire quotidien qui décuple ma productivité.Je ne fais pas qu'essayer de résoudre des problèmes, j'automatise les solutions.",
+            'bio-title': 'Du commencement à maintenant : <br> <span style="color: var(--neon-blue);">Une Vision Hybride.</span>',
+            'bio-p1': "Tout n'a pas commencé par une ligne de code, mais par une vision. Fasciné par le numérique et la <strong>Science-Fiction</strong>, j'ai vite compris que je voulais découvrir et expérimenter ces technologies qui me fascinaient tant. Mon voyage a débuté sur des serveurs <strong>Minecraft</strong>, à modifier des fichiers du jeu pour simplement m'amuser avec mes amis. Cette curiosité ne m'a jamais quitté.",
+            'bio-p2': "Aujourd'hui, cette curiosité est devenue expertise. Je commence à maîtriser les bases du Développement Web (<strong>HTML/CSS</strong>), mais ma vraie force réside dans l'utilisation des outils modernes. Je ne vois pas l'<strong>Intelligence Artificielle</strong> comme une mode, mais comme un partenaire quotidien qui décuple ma productivité. Je ne fais pas qu'essayer de résoudre des problèmes, j'automatise les solutions.",
             'bio-p3': "Je pense avoir un <strong>Profil Hybride</strong>. J'aime la logique du code, mais je vibre pour le <strong>Commerce et le Leadership</strong>. Qu'il s'agisse de planifier un projet, gérer une équipe ou vendre un produit, j'apporte ma vision.",
-            'bio-p4': "Ma motivation ? <strong>L'Impact et la Performance.</strong> Que ce soit pour créer un nouveaux projet, je suis guidé par mes idées et mon instinct. Je ne m'inquiète pas d'où je serai dans 10 ans ou même voir 5 ans, je profite plus de l'<strong>instant présent</strong> ,du jour au jour.  Je pense que ce court extrait peut résumer une partie de la complexité de ma personne et de celui auquelle j'asppir a devenir signé Gabriel Laniez",
+            'bio-p4': "Ma motivation ? <strong>L'Impact et la Performance.</strong> Que ce soit pour créer un nouveau projet, je suis guidé par mes idées et mon instinct. Je profite de l'<strong>instant présent</strong>, du jour au jour. Ce court extrait résume une partie de la complexité de ma personne — signé <span style=\"color: var(--neon-blue);\">Gabriel Laniez</span>.",
             'btn-contact': 'Me Contacter',
             'title-projects': 'Mes Réalisations',
             'btn-discover': 'Découvrir mon parcours <i class="fas fa-arrow-down" style="margin-left: 10px; animation: bounce 2s infinite;"></i>',
             'title-skills': 'Compétences Techniques',
             'timeline-title': 'Ma Vision & Parcours',
-            'proj-future': 'Projet À Venir',
-            'tag-future': 'Futur',
-            'desc-lead': 'Objectif : Lead Developer.',
-            'desc-expert': 'Expertise IA avancée.',
-            'desc-engineer': "Diplôme d'Ingénieur.",
-            'desc-alt': 'Alternance Grand Compte.',
-            'desc-data': 'Spécialisation Data.',
             'proj-but': 'BUT Informatique',
             'desc-iut': "IUT du Littoral Côte d'Opale.",
             'tag-studies': 'Études',
             'desc-portfolio': 'Lancement de mon site.',
             'btn-send-msg': 'M\'envoyer un message <i class="fas fa-paper-plane"></i>',
             'modal-title': 'CONTACTEZ-MOI',
-            
-            // NOUVEAU TITRE MODAL RESEAUX
-            'modal-social-title': 'MES RÉSEAUX PRO'
+            'modal-social-title': 'MES RÉSEAUX',
+            'chat-placeholder': 'Écrivez votre message...',
+            'chat-status': 'En ligne',
+            'chat-name': 'Assistant IA',
         },
         en: {
             'nav-home': 'Home',
             'nav-timeline': 'Journey',
             'nav-skills': 'Skills',
-            'nav-social': 'Networks', 
+            'nav-social': 'Networks',
             'nav-contact': 'Contact',
             'subtitle': 'First year BUT Computer Science student',
             'bio-title': 'From the beginning to now: <br> <span style="color: var(--neon-blue);">A Hybrid Vision.</span>',
-            'bio-p1': "It didn't start with a line of code; it started with a vision. Fascinated by the digital and the <strong>Sci-Fi movies</strong>, I quickly realized I wanted to come discover and experiment with these technologies that fascinated me so much. My journey began not in a classroom, but on <strong>Minecraft</strong> servers, edit game files to just have fun with my friends. That sparked a curiosity that never left me.",
-            'bio-p2': "Today, that curiosity has evolved into expertise. I think I'm starting to know how to master the basics of Web Development (<strong>HTML/CSS</strong>), my true edge lies in how I leverage modern tools. I see <strong>Artificial Intelligence</strong> not just as a trend, but as a daily partner that amplifies my productivity and creativity. I'm not just trying to solve problems; I automate the solutions.",
-            'bio-p3': "I thinks i have a <strong>Hybrid Profile</strong>. I love the logic of code, but I thrive on the energy of <strong>Sales and Leadership</strong>. Whether it's planning a project, managing a team, or pitching a product, I bring my mindset to the table.",
-            'bio-p4': "My motivation? <strong>Impact and Performance.</strong> Whether to create a new project, I am guided by my ideas and my instinct. I don't worry about where I'll be in 10 years or even 5 years, I will benefit more from the <strong>present moment</strong>, from day to day.I think that this short extract can summarize part of the complexity of my person and that to which I aspire to become signed Gabriel Laniez.",
+            'bio-p1': "It didn't start with a line of code; it started with a vision. Fascinated by the digital and <strong>Sci-Fi</strong>, I quickly realized I wanted to discover and experiment with these technologies that fascinated me so much. My journey began on <strong>Minecraft</strong> servers, editing game files just to have fun with my friends. That curiosity never left me.",
+            'bio-p2': "Today, that curiosity has evolved into expertise. I'm starting to master the basics of Web Development (<strong>HTML/CSS</strong>), but my true edge lies in leveraging modern tools. I see <strong>Artificial Intelligence</strong> not as a trend, but as a daily partner that amplifies my productivity. I don't just solve problems — I automate solutions.",
+            'bio-p3': "I believe I have a <strong>Hybrid Profile</strong>. I love the logic of code, but I thrive on the energy of <strong>Sales and Leadership</strong>. Whether it's planning a project, managing a team, or pitching a product, I bring my vision.",
+            'bio-p4': "My motivation? <strong>Impact and Performance.</strong> Whether creating a new project, I am guided by my ideas and instinct. I enjoy the <strong>present moment</strong>, day by day. This short extract summarizes part of my complexity — signed <span style=\"color: var(--neon-blue);\">Gabriel Laniez</span>.",
             'btn-contact': 'Contact Me',
             'title-projects': 'My Works',
             'btn-discover': 'Discover my journey <i class="fas fa-arrow-down" style="margin-left: 10px; animation: bounce 2s infinite;"></i>',
             'title-skills': 'Technical Skills',
             'timeline-title': 'My Vision & Journey',
-            'proj-future': 'Future Project',
-            'tag-future': 'Future',
-            'desc-lead': 'Goal: Lead Developer.',
-            'desc-expert': 'Advanced AI Expertise.',
-            'desc-engineer': "Engineering Degree.",
-            'desc-alt': 'Corporate Apprenticeship.',
-            'desc-data': 'Data Specialization.',
             'proj-but': 'CS Degree (BUT)',
             'desc-iut': "IUT Littoral Côte d'Opale.",
             'tag-studies': 'Studies',
             'desc-portfolio': 'Website Launch.',
             'btn-send-msg': 'Send me a message <i class="fas fa-paper-plane"></i>',
             'modal-title': 'CONTACT ME',
-            
-            // NOUVEAU TITRE MODAL RESEAUX
-            'modal-social-title': 'MY NETWORKS'
+            'modal-social-title': 'MY NETWORKS',
+            'chat-placeholder': 'Write your message...',
+            'chat-status': 'Online',
+            'chat-name': 'AI Assistant',
         }
     };
 
+    let activeLang = 'fr';
+
     function setLanguage(lang) {
+        activeLang = lang;
+
         document.getElementById('btn-fr').classList.remove('active');
         document.getElementById('btn-en').classList.remove('active');
         document.getElementById('btn-' + lang).classList.add('active');
@@ -118,152 +251,323 @@ document.addEventListener('DOMContentLoaded', () => {
                 element.innerHTML = translations[lang][key];
             }
         });
+
+        // Relancer le typewriter sur le subtitle (si changement de langue)
+        const subtitleEl = document.querySelector('.subtitle');
+        if (subtitleEl) {
+            const newText = translations[lang]['subtitle'];
+            typewriterEffect(subtitleEl, newText, 45);
+        }
+
+        // Mettre à jour le placeholder du chat
+        const chatInput = document.getElementById('user-input');
+        if (chatInput) {
+            chatInput.placeholder = translations[lang]['chat-placeholder'] || translations.fr['chat-placeholder'];
+        }
+
+        // Mettre à jour le nom et statut du chat header
+        const chatNameEl = document.querySelector('.chat-header-name');
+        const chatStatusEl = document.querySelector('.chat-header-status');
+        if (chatNameEl) chatNameEl.textContent = translations[lang]['chat-name'];
+        if (chatStatusEl) chatStatusEl.childNodes[chatStatusEl.childNodes.length - 1].textContent = ' ' + translations[lang]['chat-status'];
     }
 
     document.getElementById('btn-fr').addEventListener('click', () => setLanguage('fr'));
     document.getElementById('btn-en').addEventListener('click', () => setLanguage('en'));
 
-    // 4. Config Particules (IA)
+    // ─────────────────────────────────────────────
+    // 8. PARTICULES
+    // ─────────────────────────────────────────────
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+                   || window.innerWidth <= 768;
+
     if (typeof particlesJS !== 'undefined') {
         particlesJS('particles-js', {
-            "particles": {
-                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
-                "color": { "value": "#00f3ff" },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.5 },
-                "size": { "value": 3, "random": true },
-                "line_linked": { "enable": true, "distance": 150, "color": "#00f3ff", "opacity": 0.2, "width": 1 },
-                "move": { "enable": true, "speed": 2 }
+            particles: {
+                number: { value: 90, density: { enable: true, value_area: 800 } },
+                color: { value: '#00f3ff' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.55, random: true, anim: { enable: true, speed: 0.8, opacity_min: 0.2, sync: false } },
+                size: { value: 2.8, random: true },
+                line_linked: { enable: true, distance: 150, color: '#00f3ff', opacity: 0.28, width: 1 },
+                move: { enable: true, speed: 1.8, random: true, out_mode: 'out', attract: { enable: false } }
             },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } }
+            interactivity: {
+                detect_on: isMobile ? 'canvas' : 'window',
+                events: {
+                    onhover: { enable: !isMobile, mode: 'repulse' },
+                    onclick:  { enable: !isMobile, mode: 'push' }  // désactivé sur mobile
+                },
+                modes: {
+                    repulse: { distance: 100, duration: 0.5 },
+                    push:    { particles_nb: 4 }
+                }
             },
-            "retina_detect": true
+            retina_detect: true
         });
+
+        // ── NETTOYAGE AUTO des particules ──────────────────────────
+        // Plafond : 180 particules max. Vérification toutes les 8s.
+        const MAX_PARTICLES = 180;
+        const CLEANUP_INTERVAL = 8000;
+
+        setInterval(() => {
+            if (typeof window.pJSDom === 'undefined' || !window.pJSDom.length) return;
+            const pJS = window.pJSDom[0].pJS;
+            if (!pJS || !pJS.particles || !pJS.particles.array) return;
+
+            const count = pJS.particles.array.length;
+            if (count > MAX_PARTICLES) {
+                // Supprime l'excédent en retirant les plus anciennes (début du tableau)
+                const excess = count - MAX_PARTICLES;
+                pJS.particles.array.splice(0, excess);
+            }
+        }, CLEANUP_INTERVAL);
     }
+
 });
 
-// FONCTION GLOBALE MODAL
+// ─────────────────────────────────────────────────────────
+// MODALS
+// ─────────────────────────────────────────────────────────
 window.toggleModal = function() {
-    const modal = document.getElementById('contact-modal');
-    if (modal) modal.classList.toggle('active');
+    document.getElementById('contact-modal')?.classList.toggle('active');
 };
-document.addEventListener('click', (e) => {
-    const modal = document.getElementById('contact-modal');
-    if (modal && e.target === modal) modal.classList.remove('active');
-});
 
-// --- GESTION DU MODAL RÉSEAUX ---
 window.toggleSocialModal = function() {
-    const modal = document.getElementById('social-modal');
-    if (modal) {
-        modal.classList.toggle('active');
-    }
+    document.getElementById('social-modal')?.classList.toggle('active');
 };
 
-// Fermeture quand on clique à côté (Pour le modal social aussi)
 document.addEventListener('click', (e) => {
+    const contactModal = document.getElementById('contact-modal');
+    if (contactModal && e.target === contactModal) contactModal.classList.remove('active');
+
     const socialModal = document.getElementById('social-modal');
-    if (socialModal && e.target === socialModal) {
-        socialModal.classList.remove('active');
-    }
+    if (socialModal && e.target === socialModal) socialModal.classList.remove('active');
 });
 
-// --- SYSTÈME DE SCROLL (JUSTE LA BOUCLE / REBOOT) ---
+// ─────────────────────────────────────────────────────────
+// SCROLL — LOOP / REBOOT
+// ─────────────────────────────────────────────────────────
+let isRebooting = false;
 window.addEventListener('scroll', () => {
-    
+    if (isRebooting) return;
     const loopZone = document.getElementById('loop-zone');
-    
-    // On détecte si on est vraiment TOUT en bas de la page
-    // (document.body.offsetHeight - 10 permet une petite marge d'erreur)
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
-        
-        // 1. On affiche le message "Réinitialisation..."
-        if(loopZone) loopZone.classList.add('active');
-
-        // 2. On attend un peu et on remonte
+        if (loopZone) loopZone.classList.add('active');
+        isRebooting = true;
         setTimeout(() => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-            
-            // On cache la zone une fois remonté
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             setTimeout(() => {
-                if(loopZone) loopZone.classList.remove('active');
-            }, 1000);
-            
-        }, 800); // Délai avant remontée
+                if (loopZone) loopZone.classList.remove('active');
+                isRebooting = false;
+            }, 1200);
+        }, 800);
     }
 });
 
-// --- LOGIQUE DU CHATBOT ---
+// ─────────────────────────────────────────────────────────
+// CHATBOT — CLAUDE AI (VRAI)
+// ─────────────────────────────────────────────────────────
 
-// 1. Ouvrir / Fermer le chat
+// Contexte sur Gabriel (utilisé dans le system prompt)
+const GABRIEL_CONTEXT = `Tu es l'assistant virtuel IA du portfolio de Gabriel Laniez.
+Voici les informations sur Gabriel que tu dois utiliser pour répondre :
+
+- Nom : Gabriel Laniez
+- Âge : Étudiant première année de BUT Informatique
+- École : IUT du Littoral Côte d'Opale
+- Email : laniezgabriel59@gmail.com
+- Portfolio : laniezgabriel.vercel.app
+
+Compétences techniques :
+- HTML/CSS (niveau avancé)
+- JavaScript (niveau intermédiaire)
+- Java (niveau intermédiaire)
+- SQL / Data (niveau intermédiaire)
+- C / C++ (niveau intermédiaire)
+- Python (niveau débutant)
+- Réseau (niveau débutant)
+- IA & Prompting (niveau expert — sa vraie force)
+- Gestion de projet (niveau expert)
+- Langues : Français (natif), Anglais (bilingue), Espagnol (débutant)
+
+Profil :
+Gabriel a un profil hybride technique + business/leadership. Passionné de Science-Fiction et de numérique, il a commencé à coder en modifiant des fichiers de jeux Minecraft. Il voit l'IA comme un outil puissant de productivité et la maîtrise au quotidien. Il est guidé par l'impact, la performance et le moment présent.
+
+Projets :
+- Portfolio V2 (ce site) — HTML/CSS/JS
+- Projets en développement (WordPress, Python)
+
+Règles pour tes réponses :
+- Réponds toujours dans la même langue que l'utilisateur (Français si question en FR, English if question in EN)
+- Sois concis, friendly, et professionnel
+- Si on te demande de contacter Gabriel, donne l'email : laniezgabriel59@gmail.com
+- Reste dans le contexte du portfolio. Pour les sujets hors contexte, redirige poliment
+- Max 2-3 phrases par réponse sauf si nécessaire`;
+
+let chatHistory = [];
+
 function toggleChat() {
     const chatWindow = document.getElementById('chat-window');
-    chatWindow.classList.toggle('active');
-}
+    if (!chatWindow) return;
 
-// 2. Gérer la touche "Entrée"
-function handleEnter(e) {
-    if (e.key === 'Enter') {
-        sendMessage();
+    const isOpen = chatWindow.classList.contains('active');
+
+    if (!isOpen) {
+        chatWindow.style.display = 'flex';
+        requestAnimationFrame(() => {
+            chatWindow.classList.add('active');
+        });
+    } else {
+        chatWindow.classList.remove('active');
+        setTimeout(() => {
+            chatWindow.style.display = 'none';
+        }, 300);
     }
 }
 
-// 3. Envoyer le message
-function sendMessage() {
+function handleEnter(e) {
+    if (e.key === 'Enter') sendMessage();
+}
+
+async function sendMessage() {
     const inputField = document.getElementById('user-input');
-    const messageText = inputField.value.trim();
-    
-    if (messageText === "") return;
+    const messageText = inputField?.value.trim();
+    if (!messageText) return;
 
-    // Ajouter le message de l'utilisateur (à droite)
     addMessage(messageText, 'user-message');
-    inputField.value = ""; // Vider le champ
+    inputField.value = '';
 
-    // Simulation de réponse (Délai de 1 seconde pour faire "réfléchir" l'IA)
-    setTimeout(() => {
-        let botResponse = "Je ne suis qu'une interface pour le moment, mais Gabriel travaille sur vraie IA !";
-        
-        // Petite logique simple pour la démo
-        const lowerMsg = messageText.toLowerCase();
-        if(lowerMsg.includes('bonjour') || lowerMsg.includes('salut')) {
-            botResponse = "Bonjour ! Ravi de vous voir sur le portfolio de Gabriel.";
-        } else if (lowerMsg.includes('contact') || lowerMsg.includes('mail')) {
-            botResponse = "Vous pouvez contacter Gabriel via le formulaire en bas de page ou par mail : laniezgabriel59@gmail.com";
-        } else if (lowerMsg.includes('projet') || lowerMsg.includes('réalisations')) {
-            botResponse = "Gabriel a travaillé sur plusieurs projets : Bots Discord, Sites Web et bientôt de l'IA.";
+    chatHistory.push({ role: 'user', content: messageText });
+
+    const typingEl = showTypingIndicator();
+
+    // Détecte si on est en local (pas sur Vercel)
+    const isLocal = window.location.hostname === 'localhost'
+                 || window.location.hostname === '127.0.0.1'
+                 || window.location.protocol === 'file:';
+
+    if (isLocal) {
+        removeTypingIndicator(typingEl);
+        const msg = activeLang === 'fr'
+            ? "⚠️ Le chatbot IA fonctionne uniquement sur le site déployé (Vercel). En local, l'API n'est pas disponible. Déploie le site pour le tester !"
+            : "⚠️ The AI chatbot only works on the deployed site (Vercel). The API is not available locally. Deploy the site to test it!";
+        addMessage(msg, 'bot-message');
+        return;
+    }
+
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // timeout 15s
+
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: chatHistory,
+                systemPrompt: GABRIEL_CONTEXT
+            }),
+            signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+        removeTypingIndicator(typingEl);
+
+        if (!response.ok) {
+            // Lire le body d'erreur pour diagnostiquer
+            let errDetail = '';
+            try { const e = await response.json(); errDetail = e.error || ''; } catch(_) {}
+
+            // Erreur 500 = clé API probablement pas configurée
+            if (response.status === 500) {
+                const msg = activeLang === 'fr'
+                    ? "⚙️ Clé API non configurée sur Vercel. Va dans Settings → Environment Variables et ajoute ANTHROPIC_API_KEY."
+                    : "⚙️ API key not set on Vercel. Go to Settings → Environment Variables and add ANTHROPIC_API_KEY.";
+                addMessage(msg, 'bot-message');
+            } else {
+                addMessage(
+                    activeLang === 'fr'
+                        ? `Erreur ${response.status}. Réessaie dans un moment !`
+                        : `Error ${response.status}. Please try again in a moment!`,
+                    'bot-message'
+                );
+            }
+            return;
         }
 
-        addMessage(botResponse, 'bot-message');
-    }, 1000);
+        const data = await response.json();
+        const botReply = data.reply || (activeLang === 'fr'
+            ? "Je n'ai pas reçu de réponse. Réessaie !"
+            : "I didn't receive a response. Please try again!");
+
+        addMessage(botReply, 'bot-message');
+        chatHistory.push({ role: 'assistant', content: botReply });
+
+    } catch (err) {
+        removeTypingIndicator(typingEl);
+
+        let msg;
+        if (err.name === 'AbortError') {
+            msg = activeLang === 'fr'
+                ? "⏱️ Délai dépassé. Vérifie ta connexion et réessaie."
+                : "⏱️ Request timed out. Check your connection and try again.";
+        } else {
+            msg = activeLang === 'fr'
+                ? "❌ Impossible de joindre le serveur. Assure-toi que le site est bien déployé sur Vercel."
+                : "❌ Could not reach the server. Make sure the site is deployed on Vercel.";
+        }
+        addMessage(msg, 'bot-message');
+    }
 }
 
-// Fonction utilitaire pour ajouter une bulle HTML
 function addMessage(text, className) {
     const chatMessages = document.getElementById('chat-messages');
+    if (!chatMessages) return;
+
     const msgDiv = document.createElement('div');
     msgDiv.classList.add('message', className);
-    msgDiv.innerText = text;
+    msgDiv.innerHTML = text;
     chatMessages.appendChild(msgDiv);
-    
-    // Auto-scroll vers le bas
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
-// --- FERMETURE DU CHAT AU CLIC EXTÉRIEUR ---
+
+function showTypingIndicator() {
+    const chatMessages = document.getElementById('chat-messages');
+    if (!chatMessages) return null;
+
+    const typingDiv = document.createElement('div');
+    typingDiv.classList.add('typing-indicator');
+    typingDiv.id = 'typing-indicator';
+    typingDiv.innerHTML = `
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+    `;
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return typingDiv;
+}
+
+function removeTypingIndicator(el) {
+    if (el && el.parentNode) el.parentNode.removeChild(el);
+    const existing = document.getElementById('typing-indicator');
+    if (existing) existing.remove();
+}
+
+// Fermeture au clic extérieur
 document.addEventListener('click', (e) => {
     const chatWindow = document.getElementById('chat-window');
-    const chatBtn = document.getElementById('chat-toggle-btn');
-
-    // On vérifie si le chat est ouvert
-    if (chatWindow && chatWindow.classList.contains('active')) {
-        
-        // Si on clique AILLEURS que sur la fenêtre ET AILLEURS que sur le bouton
-        if (!chatWindow.contains(e.target) && !chatBtn.contains(e.target)) {
+    const chatBtn    = document.getElementById('chat-toggle-btn');
+    if (chatWindow?.classList.contains('active')) {
+        if (!chatWindow.contains(e.target) && !chatBtn?.contains(e.target)) {
             chatWindow.classList.remove('active');
+            setTimeout(() => { chatWindow.style.display = 'none'; }, 300);
         }
     }
 });
+
+// Expose les fonctions globalement
+window.toggleChat   = toggleChat;
+window.handleEnter  = handleEnter;
+window.sendMessage  = sendMessage;
